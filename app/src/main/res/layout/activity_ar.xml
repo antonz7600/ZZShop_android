@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+
+    <fragment
+        android:id="@+id/sceneform_fragment"
+        android:name="com.google.ar.sceneform.ux.ArFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gallery_layout"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintVertical_weight="9"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/drawer"
+                android:src="@drawable/drawer"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/modern"
+                android:src="@drawable/modern"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/zaha_light"
+                android:src="@drawable/zaha_light"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/table"
+                android:src="@drawable/table"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/cadeira"
+                android:src="@drawable/cadeira"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+    <LinearLayout
+        android:id="@+id/gallery_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sceneform_fragment"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintVertical_weight="1"/>
+
+</FrameLayout>
