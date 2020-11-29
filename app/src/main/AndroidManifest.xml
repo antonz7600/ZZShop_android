@@ -4,18 +4,29 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera.ar" android:required="true" />
 
     <application
+        android:grantUriPermissions="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+
+        android:name="com.orm.SugarApp">
+
+        <meta-data android:name="DATABASE" android:value="local.db"/>
+        <meta-data android:name="VERSION" android:value="1"/>
+        <meta-data android:name="QUERY_LOG" android:value="true"/>
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.example.zikea"/>
+
         <meta-data android:name="com.google.ar.core" android:value="required" />
-        <activity android:name=".ArActivity"></activity>
+
+        <activity android:name=".ArActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
