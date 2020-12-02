@@ -2,11 +2,12 @@ package com.example.zikea
 
 import android.content.res.Resources
 import android.graphics.Color
+import android.media.AudioManager
+import android.media.SoundPool
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import com.github.dhaval2404.colorpicker.ColorPickerDialog
 import com.github.dhaval2404.colorpicker.model.ColorShape
@@ -34,9 +35,12 @@ class ArActivity : AppCompatActivity(), View.OnClickListener {
 
     internal var selected = 100
 
+    private var soundPool: SoundPool? = null
+
     var currentColor = Color.rgb(0,0,0)
 
     override fun onClick(view: View?){
+        soundPool?.play(5, 1F, 1F, 0, 0, 1F)
         Log.v("TAAAG", view!!.id.toString())
         if (view!!.id == R.id.drawer){
             selected = 1
@@ -63,30 +67,32 @@ class ArActivity : AppCompatActivity(), View.OnClickListener {
     private fun selfSetBackground(id: Int) {
         for (i in arrayView.indices){
             if (arrayView[i].id == id){
-                arrayView[i].setBackgroundColor(android.graphics.Color.parseColor("#80333639"))
+                arrayView[i].setBackgroundColor(Color.parseColor("#80333639"))
             }
             else{
-                arrayView[i].setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                arrayView[i].setBackgroundColor(Color.TRANSPARENT)
             }
         }
-    }
-
-    private fun insertDatabase() {
-//        val key1 = Key(21, "zaha_light", 21)
-//        val key2 = Key(25, "drawer", 25)
-//        val key3 = Key(23, "modern", 23)
-//        val key4 = Key(24, "cadeira", 24)
-//        val key5 = Key(22, "table", 22)
-//        key1.save()
-//        key2.save()
-//        key3.save()
-//        key4.save()
-//        key5.save()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar)
+
+        soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
+        soundPool!!.load(baseContext, R.raw.notification, 1)
+        soundPool!!.load(baseContext, R.raw.intro, 2)
+        soundPool!!.load(baseContext, R.raw.sweep, 3)
+        soundPool!!.load(baseContext, R.raw.click, 4)
+        soundPool!!.load(baseContext, R.raw.drink, 5)
+
+        soundPool!!.setOnLoadCompleteListener { soundPool, _, _ -> soundPool?.play(2, 1F, 1F, 0, 0, 1F) }
+
+        val array = findViewById<View>(R.id.array_choose)
+        array.visibility = View.INVISIBLE
+        findViewById<View>(R.id.array_choose).invalidate()
+        findViewById<View>(R.id.ar_view).invalidate()
+
 
         val arguments = intent.extras
         val id = arguments!!["id"].toString().toInt()
@@ -107,6 +113,7 @@ class ArActivity : AppCompatActivity(), View.OnClickListener {
         arFragment.setOnTapArPlaneListener{hitResult, plane, motionEvent ->
             val anchor = hitResult.createAnchor()
             val anchorNode = AnchorNode(anchor)
+            soundPool?.play(4, 1F, 1F, 0, 0, 1F)
             anchorNode.setParent(arFragment.arSceneView.scene)
             if ((selected > 0) and (selected <= 5))
                 createModel(anchorNode, selected)
@@ -121,11 +128,12 @@ class ArActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun colorListener() {
+        soundPool?.play(1, 1F, 1F, 0, 0, 1F)
         ColorPickerDialog
             .Builder(this)
-            .setTitle("Pick the color")   // Pass Activity Instance
-            .setColorShape(ColorShape.SQAURE)   // Default ColorShape.CIRCLE
-            .setDefaultColor(Color.rgb(255, 255, 0))        	// Pass Default Color
+            .setTitle("Pick the color")
+            .setColorShape(ColorShape.SQAURE)
+            .setDefaultColor(Color.rgb(255, 255, 0))
             .setColorListener { color, colorHex ->
                 currentColor = color
             }
@@ -133,13 +141,18 @@ class ArActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun arrayListener() {
+        soundPool?.play(3, 1F, 1F, 0, 0, 1F)
         val array = findViewById<View>(R.id.array_choose)
-        if (array.visibility == View.INVISIBLE)
+        if (array.visibility == View.INVISIBLE) {
             array.visibility = View.VISIBLE
+        }
         else{
             array.visibility = View.INVISIBLE
             selected = 100
         }
+        findViewById<View>(R.id.array_choose).invalidate()
+        findViewById<View>(R.id.ar_view).invalidate()
+        Log.v("TAAAG", (array.visibility == View.INVISIBLE).toString())
     }
 
     private fun setColor(rendereble: ModelRenderable) : ModelRenderable {
